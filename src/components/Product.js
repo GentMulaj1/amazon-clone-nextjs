@@ -1,8 +1,11 @@
 import Image from "next/image"
 import { useEffect, useState } from "react"
 import { StarIcon } from "@heroicons/react/solid"
+import { useDispatch } from "react-redux"
+import { addToBasket } from "../slices/basketSlice"
 
 const Product = ({ id, title, price ,description, category, image }) => {
+    const dispatch = useDispatch();
 
     const MAX_RATING = 5;
     const MIN_RATING = 1;
@@ -17,6 +20,22 @@ const Product = ({ id, title, price ,description, category, image }) => {
         style: "currency",
         currency: "USD",
     });
+
+    const addItemToBasket = () => {
+        const product = {
+            id,
+            title,
+            price,
+            rating,
+            description,
+            category,
+            image,
+            hasPrime            
+        };
+
+        // Sending the product as an action to REDUX store... the basket slice
+        dispatch(addToBasket(product))
+    }
 
 
     return (
@@ -36,6 +55,12 @@ const Product = ({ id, title, price ,description, category, image }) => {
             ))}
         </div> */}
 
+        {/* ! FIX */}
+        {/* {Array(rating).fill().map((_,i) => 
+            <StarIcon key={i} className="h-5 text-yellow-500" />
+            )
+        } */}
+
         <p className="text-xs my-2 line-clamp-2 ">{description}</p>
 
         <div className="mb-5 ">
@@ -46,12 +71,12 @@ const Product = ({ id, title, price ,description, category, image }) => {
 
         {/* {hasPrime && (
             <div className="flex items-center space-x-2 -mt-5">
-                <img className="w-12" src="https://assets.stickpng.com/images/5f7f75fa3dd424000436e50e.png" alt="" />
+                <img className="w-12" src="https://www.pngplay.com/wp-content/uploads/3/Amazon-Prime-Logo-PNG-HD-Quality.png" alt="" />
                 <p className="text-xs text-gray-500">FREE Next-day Delivery</p>
             </div>
         )} */}
 
-        <button className="mt-auto button ">Add to Basket</button>
+        <button onClick={addItemToBasket} className="mt-auto button" >Add to Basket</button>
 
     </div>
   )
